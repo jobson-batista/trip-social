@@ -1,0 +1,218 @@
+/* -------- CSS VARIABLES (THE ROAD DESIGN SYSTEM) -------- */
+:root {
+    --bg-blackout: #000000;
+    --panel-bg: #111111;
+    --text-primary: #FFFFFF;
+    --text-muted: #888888;
+    
+    --color-accent: #ffaa00;     /* Orange: Default theme / Alert */
+    --color-danger: #ea3323;     /* Red: Hazard / PTT Active */
+    --color-success: #00e676;    /* Green: Connected */
+    --color-offline-bg: #2b1100; /* Dark Orange: Offline warning */
+    
+    --font-main: 'Inter', sans-serif;
+    --border-radius-sm: 12px;
+    --border-radius-lg: 24px;
+}
+
+/* -------- RESET & BASE -------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none; /* Previne seleção de texto acidental ao tocar (Blind-tap) */
+}
+
+body.theme-blackout {
+    background-color: var(--bg-blackout);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    overflow: hidden; /* Fixo numa tela só */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* -------- OFFLINE BANNER -------- */
+#offline-banner {
+    background-color: var(--color-danger);
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(234, 51, 35, 0.4);
+    z-index: 999;
+}
+#offline-banner.hidden { display: none; }
+
+/* Offline Mode Active via JS */
+body.is-offline {
+    border: 6px solid var(--color-accent);
+    background-color: var(--color-offline-bg);
+}
+
+/* -------- LAYOUT: DASHBOARD -------- */
+.dashboard {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* -------- RADAR PANEL -------- */
+.radar-panel {
+    background-color: var(--panel-bg);
+    border-radius: var(--border-radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.radar-status {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.pulse-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    /* Default offline */
+    background-color: var(--text-muted); 
+}
+.pulse-indicator.online {
+    background-color: var(--color-success);
+    box-shadow: 0 0 15px var(--color-success);
+    animation: pulse-conn 2s infinite;
+}
+
+#radar-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--color-accent);
+    margin: 0;
+}
+#radar-title span { color: #fff; font-weight: 700; }
+
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+}
+.stat-box { display: flex; flex-direction: column; gap: 4px; }
+.stat-box .label { font-size: 0.85rem; color: var(--text-muted); font-weight: 700; letter-spacing: 1px; }
+.stat-box .value { font-size: 2rem; font-weight: 900; }
+.text-right { text-align: right; }
+
+/* Radar Mock Graphic */
+.mini-map-zone {
+    height: 80px;
+    background: repeating-linear-gradient(90deg, #1a1a1a, #1a1a1a 10px, #222 10px, #222 20px);
+    border-radius: var(--border-radius-sm);
+    position: relative;
+    border: 2px solid #333;
+    overflow: hidden;
+    margin-top: 10px;
+}
+.car-dot {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.9rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: left 0.5s ease;
+}
+.my-car {
+    background-color: var(--color-accent);
+    color: #000;
+    left: 10%;
+    z-index: 10;
+}
+.other-car {
+    background-color: #444;
+    color: #fff;
+    left: 50%; /* JS will update this */
+}
+
+/* -------- PUSH TO TALK (PTT) -------- */
+.ptt-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-massive-circle {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(145deg, #1f1f1f, #111111);
+    box-shadow: 10px 10px 30px #0a0a0a, -10px -10px 30px #1c1c1c;
+    color: var(--color-accent);
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+.btn-massive-circle:active {
+    background: var(--color-danger);
+    color: #fff;
+    transform: scale(0.95);
+    box-shadow: 0 0 50px var(--color-danger);
+}
+.icon-mic { width: 50px; height: 50px; }
+
+/* -------- ACTIONS PANEL (BLIND TAP) -------- */
+.actions-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.btn-block {
+    width: 100%;
+    padding: 30px;
+    border-radius: var(--border-radius-sm);
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.btn-danger {
+    background-color: var(--color-danger);
+    color: #fff;
+}
+.btn-danger:active { opacity: 0.8; transform: translateY(2px); }
+.btn-secondary {
+    background-color: #333;
+    color: #fff;
+    border: 2px solid #555;
+}
+.btn-secondary:active { background-color: #444; }
+
+/* -------- ANIMATIONS -------- */
+@keyframes pulse-conn {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 230, 118, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
+}
